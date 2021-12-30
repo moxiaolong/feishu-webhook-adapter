@@ -1,0 +1,10 @@
+quarkus:
+  profile: prod
+  http:
+    port: 8080
+  rest-client:
+    feishu:
+         url: https://open.feishu.cn/open-apis/bot/v2/hook/0956120f-8079-434e-a7fa-4ca80498315e
+webhook:
+  feishu:
+    uri: https://open.feishu.cn/open-apis/bot/v2/hook/0956120f-8079-434e-a7fa-4ca80498315e

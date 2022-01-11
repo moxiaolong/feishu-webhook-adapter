@@ -70,13 +70,16 @@ public class JenkinsController {
         stringBuilder.append("**Git 提交人：**").append(jenkinsBuildInfo.getGitCommitUser()).append("\n");
         stringBuilder.append("**Git Commit：**").append(jenkinsBuildInfo.getGitCommit()).append("\n");
         stringBuilder.append("**Git Message：**").append("\n").append(jenkinsBuildInfo.getGitCommitMessage());
-
+        if (jenkinsBuildInfo.getExtra() != null) {
+            stringBuilder.append("\n").append(jenkinsBuildInfo.getExtra());
+        }
         //按钮
         final ArrayList<CardMessage.ElementsBean.ActionsBean> actionsBeans = new ArrayList<>();
         final CardMessage.ElementsBean.ActionsBean button = CardMessageFactory.createButton("\uD83D\uDD0D查看作业", jenkinsBuildInfo.getJobUrl());
         actionsBeans.add(button);
 
         final BaseMessage baseMessage = CardMessageFactory.createBaseMessage(titleColor, titleEmoji + buildStatus, stringBuilder.toString(), actionsBeans);
+
 
         log.info(baseMessage.toString());
         final String res = feishuService.send(baseMessage);

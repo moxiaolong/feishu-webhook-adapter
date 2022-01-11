@@ -43,4 +43,9 @@ public class JenkinsBuildInfo {
      * 工作的url
      */
     private String jobUrl;
+
+    /**
+     * 扩展信息
+     */
+    private String extra;
 }

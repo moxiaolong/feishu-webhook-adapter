@@ -37,6 +37,5 @@ COPY --chown=185 target/quarkus-app/quarkus/ /deployments/quarkus/
 EXPOSE 8080
 USER 185
 
-ENTRYPOINT ["/bin/sh" "-c" "./application -Dquarkus.http.host=0.0.0.0 -Dfeishu.url=$FEISHUURL"]
-
+ENTRYPOINT [ "java", "-jar", "/deployments/quarkus-run.jar" ]
 

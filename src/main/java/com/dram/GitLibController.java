@@ -14,6 +14,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * GitLib
@@ -29,6 +30,7 @@ public class GitLibController {
     @Inject
     @RestClient
     FeishuService feishuService;
+
     /**
      * 推
      *
@@ -43,19 +45,26 @@ public class GitLibController {
         String titleEmoji = "\uD83D\uDE80";
 
         final GitLabPushEvent.ProjectBean project = gitLabPushEvent.getProject();
-        final GitLabPushEvent.CommitsBean commitsBean = gitLabPushEvent.getCommits().get(0);
+        List<GitLabPushEvent.CommitsBean> commits = gitLabPushEvent.getCommits();
+        final GitLabPushEvent.CommitsBean lastCommit = commits.get(commits.size() - 1);
 
 
         final StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("**项目名：**").append(project.getName()).append("\n");
-        stringBuilder.append("**Git 分支：**").append(project.getDefault_branch()).append("\n");
-        stringBuilder.append("**Git 提交人：**").append(commitsBean.getAuthor().getName()).append("\n");
-        stringBuilder.append("**Git Commit：**").append(commitsBean.getId()).append("\n");
-        stringBuilder.append("**Git Message：**").append("\n").append(commitsBean.getMessage());
+        stringBuilder.append("**分支：**").append(gitLabPushEvent.getRef()).append("\n");
+        ;
+        stringBuilder.append("**提交用户：**").append(gitLabPushEvent.getUser_name()).append("\n");
+        stringBuilder.append("**Commit 数量：**").append(commits.size()).append("\n");
+        stringBuilder.append("**Last Commit：**").append(lastCommit.getId()).append("\n");
+        stringBuilder.append("**Message：**").append("\n");
+        for (int i = 0; i < commits.size(); i++) {
+            stringBuilder.append(i + 1).append(".").append(commits.get(i).getMessage()).append("\n");
+        }
+
 
         //按钮
         final ArrayList<CardMessage.ElementsBean.ActionsBean> actionsBeans = new ArrayList<>();
-        final CardMessage.ElementsBean.ActionsBean button = CardMessageFactory.createButton("\uD83D\uDD0D查看提交", commitsBean.getUrl());
+        final CardMessage.ElementsBean.ActionsBean button = CardMessageFactory.createButton("\uD83D\uDD0D查看最后的提交", lastCommit.getUrl());
         actionsBeans.add(button);
 
         final BaseMessage baseMessage = CardMessageFactory.createBaseMessage(titleColor, titleEmoji + "推送事件", stringBuilder.toString(), actionsBeans);
